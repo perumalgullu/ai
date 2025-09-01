@@ -1,7 +1,3 @@
-<?php
-session_start();
-$loggedIn = isset($_SESSION['username']);
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -35,6 +31,24 @@ $loggedIn = isset($_SESSION['username']);
       font-family: 'Poppins', sans-serif;
       color: var(--text-color);
       background: var(--bg-color);
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+    }
+
+    #particles-js {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      background: #f8fff8;
+    }
+
+    header, nav, .hero, .categories, footer {
+      position: relative;
+      z-index: 2;
     }
 
     header {
@@ -48,36 +62,42 @@ $loggedIn = isset($_SESSION['username']);
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 15px;
+      flex-wrap: wrap;
+      gap: 20px;
     }
 
-    .header-title-container img.left-img {
-      width: 120px;
+    .header-title-container img.left-img{
+        width:250px;
+        height: auto;
     }
-
     .header-title-container img.right-img {
-      width: 100px;
+      width: 175px;
+      height: auto;
     }
 
     .header-title-container h1 {
-      font-size: 30px;
+      font-size: 36px;
       color: #3cd070;
       text-shadow: 1px 1px 0 #a0f0c0;
+      margin: 0 20px;
+      text-align: center;
     }
 
     nav {
       background: var(--footer-bg);
       padding: 12px 0;
       text-align: center;
+      flex-wrap: wrap;
     }
 
     nav a {
       color: #fff;
       text-decoration: none;
-      margin: 10px 14px;
+      margin: 8px 12px;
       font-size: 17px;
       font-weight: 600;
       position: relative;
+      display: inline-block;
     }
 
     nav a::after {
@@ -114,6 +134,7 @@ $loggedIn = isset($_SESSION['username']);
       font-size: 16px;
       max-width: 800px;
       margin: 0 auto 25px;
+      padding: 0 10px;
     }
 
     .hero .buttons a {
@@ -192,18 +213,25 @@ $loggedIn = isset($_SESSION['username']);
       margin-top: 60px;
     }
 
-    @media (max-width: 600px) {
+    /* Mobile Optimization */
+    @media (max-width: 768px) {
       .header-title-container {
         flex-direction: column;
         gap: 10px;
       }
 
       .header-title-container img {
-        width: 60px !important;
+        width: 120px !important;
+        height: auto;
       }
 
       .header-title-container h1 {
-        font-size: 24px;
+        font-size: 26px;
+      }
+
+      nav a {
+        font-size: 15px;
+        margin: 6px 10px;
       }
 
       .hero {
@@ -215,9 +243,9 @@ $loggedIn = isset($_SESSION['username']);
         font-size: 24px;
       }
 
-      nav a {
-        font-size: 15px;
-        margin: 6px 10px;
+      .hero .buttons a {
+        font-size: 14px;
+        padding: 10px 20px;
       }
 
       .cat {
@@ -228,10 +256,18 @@ $loggedIn = isset($_SESSION['username']);
       .cat h3 {
         font-size: 18px;
       }
+
+      .cat img {
+        width: 60px;
+      }
     }
+    
   </style>
 </head>
 <body>
+
+<!-- Particle Background -->
+<div id="particles-js"></div>
 
 <header>
   <div class="header-title-container">
@@ -241,60 +277,91 @@ $loggedIn = isset($_SESSION['username']);
   </div>
 </header>
 
+
+
 <nav>
   <a href="index.php"><i class="fas fa-home"></i> Home</a>
   <a href="about.php"><i class="fas fa-info-circle"></i> About</a>
   <a href="contact.php"><i class="fas fa-envelope"></i> Contact</a>
-  <a href="regiester.php">login</a>
+  <a href="dashboard.php"><i class="fas fa-table"></i> User</a>
+  <a href="dataenginneer.php">
+</a>
+
 </nav>
 
 <section class="hero" data-aos="fade-up">
   <h2>Recycle Today, Protect Tomorrow</h2>
   <p>Join our mission to reduce electronic waste. Identify, manage, and dispose of unused electronics responsibly. Every device recycled is a step toward a cleaner future.</p>
   <div class="buttons">
-    <a href="dashboard.php"><i class="fas fa-recycle"></i> Explore Dashboard</a>
-    <?php if (!$loggedIn): ?>
-      <a href="regiester.php"><i class="fas fa-user-plus"></i> Get Started</a>
-    <?php endif; ?>
-  </div>
+    <a href="admin_login.php"><i class="fas fa-recycle"></i> Admin Dashboard</a>
+    <a href="dataengineer_login.php"><i class="fas fa-user-plus"></i>Data Engineer</a>
+ </div>
 </section>
 
 <section class="categories">
   <div class="cat" data-aos="fade-up">
-    <img src="assets/reusable.png" alt="Reusable" />
     <h3>Reusable</h3>
     <p>Fully functional electronics ready for reuse or donation to those in need.</p>
   </div>
   <div class="cat" data-aos="fade-up" data-aos-delay="100">
-    <img src="assets/refurbishable.png" alt="Refurbishable" />
     <h3>Refurbishable</h3>
     <p>Devices requiring minor repairs to be returned to working condition.</p>
   </div>
   <div class="cat" data-aos="fade-up" data-aos-delay="200">
-    <img src="assets/disposable.png" alt="Disposable" />
     <h3>Disposable</h3>
     <p>End-of-life electronics safely processed for disposal or recycling.</p>
   </div>
 </section>
 
-<?php if ($loggedIn): ?>
-  <div class="login-status">
-    Welcome back, <strong><?php echo htmlspecialchars($_SESSION['username']); ?></strong>!
-    
-  </div>
-<?php endif; ?>
-
 <footer>
   &copy; <?= date("Y") ?> E-Waste Management System | developed by Perumal.
 </footer>
 
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+<script>
+particlesJS("particles-js", {
+  particles: {
+    number: { value: 60 },
+    color: { value: "#00b894" },
+    shape: { type: "circle" },
+    opacity: { value: 0.3 },
+    size: { value: 3 },
+    line_linked: {
+      enable: true,
+      distance: 150,
+      color: "#00b894",
+      opacity: 0.2,
+      width: 1
+    },
+    move: {
+      enable: true,
+      speed: 2,
+      direction: "none",
+      out_mode: "out"
+    }
+  },
+  interactivity: {
+    events: {
+      onhover: { enable: true, mode: "grab" },
+      onclick: { enable: true, mode: "push" }
+    },
+    modes: {
+      grab: { distance: 200, line_linked: { opacity: 0.3 } },
+      push: { particles_nb: 2 }
+    }
+  },
+  retina_detect: true
+});
+</script>
 <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
-<script>AOS.init({ duration: 1000, once: true });</script><!-- Floating Chatbot -->
+<script>AOS.init({ duration: 1000, once: true });</script>
+<!-- Floating Chatbot -->
 <div id="chatbot-toggle">
   💬
 </div>
 
-<iframe id="chatbot-frame" src="chatgpt.php"></iframe>
+<iframe id="chatbot-frame" src="proxy.php"></iframe>
 
 <style>
   #chatbot-toggle {
@@ -351,7 +418,6 @@ $loggedIn = isset($_SESSION['username']);
   });
 </script>
 
-  
 
 </body>
 </html>
