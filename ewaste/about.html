@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>About - E-Waste Management</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: 'Poppins', sans-serif;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    #particles-js {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      background: linear-gradient(135deg, #d4fdd4, #b5f0b5);
+    }
+
+    header {
+      background: rgba(0, 153, 102, 0.9);
+      padding: 20px;
+      text-align: center;
+      color: #fff;
+      font-size: 32px;
+      font-weight: 600;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    nav {
+      background-color: rgba(255, 255, 255, 0.8);
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      padding: 12px 0;
+    }
+
+    nav a {
+      color: #007d57;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 16px;
+      padding: 8px 14px;
+      border-radius: 6px;
+      transition: background 0.3s;
+    }
+
+    nav a:hover {
+      background-color: #c0f5d1;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 60px auto;
+      padding: 40px;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 16px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    h2 {
+      color: #007d57;
+      font-size: 34px;
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .section {
+      margin-bottom: 30px;
+    }
+
+    .section-title {
+      font-size: 22px;
+      font-weight: 600;
+      margin-bottom: 10px;
+      color: #009966;
+    }
+
+    p {
+      font-size: 18px;
+      color: #333;
+      text-align: justify;
+      margin-bottom: 16px;
+    }
+
+    footer {
+      background-color: #007d57;
+      color: white;
+      text-align: center;
+      padding: 16px;
+      font-size: 15px;
+      margin-top: 60px;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        margin: 30px 15px;
+        padding: 25px;
+      }
+
+      h2 {
+        font-size: 28px;
+      }
+
+      p {
+        font-size: 16px;
+      }
+
+      nav {
+        flex-direction: column;
+        gap: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Particle background -->
+  <div id="particles-js"></div>
+
+  <header>🌱 About E-Waste Management</header>
+
+  <nav>
+    <a href="index.php">Home</a>
+  </nav>
+
+  <div class="container">
+    <h2>Our Mission</h2>
+    <p>
+      The E-Waste Management Project promotes responsible disposal, recycling, and reuse of electronic waste.
+      With increasing electronic consumption, managing waste sustainably is vital for environmental protection.
+    </p>
+
+    <div class="section">
+      <div class="section-title">♻️ Waste Classification</div>
+      <p>
+        We simplify sorting of electronic waste into:
+        <strong>Reusable</strong>, <strong>Refurbishable</strong>, and <strong>Fully Disposable</strong> categories.
+      </p>
+    </div>
+
+    <div class="section">
+      <div class="section-title">🌍 Why It Matters</div>
+      <p>
+        E-waste can cause pollution if not handled properly. Recycling helps save resources and reduce environmental harm.
+      </p>
+    </div>
+
+    <div class="section">
+      <div class="section-title">📈 What We Provide</div>
+      <p>
+        - Digital dashboard for e-waste tracking<br>
+        - Easy product classification<br>
+        - Admin tools with export options<br>
+        - Awareness and reporting tools
+      </p>
+    </div>
+  </div>
+
+  <footer>
+    &copy; 2025 E-Waste Management | Built for a Greener Tomorrow 🌿
+  </footer>
+
+  <!-- particles.js library -->
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <script>
+    particlesJS("particles-js", {
+      "particles": {
+        "number": { "value": 80 },
+        "color": { "value": "#00cc66" },
+        "shape": { "type": "circle" },
+        "opacity": {
+          "value": 0.3,
+          "random": true
+        },
+        "size": {
+          "value": 3,
+          "random": true
+        },
+        "line_linked": {
+          "enable": true,
+          "distance": 150,
+          "color": "#00cc66",
+          "opacity": 0.3,
+          "width": 1
+        },
+        "move": {
+          "enable": true,
+          "speed": 2
+        }
+      },
+      "interactivity": {
+        "events": {
+          "onhover": { "enable": true, "mode": "grab" },
+          "onclick": { "enable": true, "mode": "push" }
+        },
+        "modes": {
+          "grab": { "distance": 200, "line_linked": { "opacity": 0.4 } },
+          "push": { "particles_nb": 4 }
+        }
+      },
+      "retina_detect": true
+    });
+  </script>
+</body>
+</html>
