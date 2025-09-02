@@ -227,24 +227,5 @@
 }
 
   </script>
-  <!-- ✅ Chatbot Toggle Button -->
-<button id="chatbot-toggle" 
-  class="fixed bottom-5 right-5 bg-green-600 text-white p-4 rounded-full shadow-lg z-50 hover:bg-green-700 transition">
-  <i class="fas fa-comments text-xl"></i>
-</button>
-
-<!-- ✅ Chatbot iframe (hidden by default) -->
-<iframe id="chatbot-frame" 
-  src="chatgpt.html" 
-  class="fixed bottom-20 right-5 w-[400px] h-[600px] border-0 shadow-lg rounded-lg z-50 hidden"></iframe>
-
-<script>
-  const toggleBtn = document.getElementById("chatbot-toggle");
-  const chatbotFrame = document.getElementById("chatbot-frame");
-
-  toggleBtn.addEventListener("click", () => {
-    chatbotFrame.classList.toggle("hidden");
-  });
-</script>
 </body>
 </html>
