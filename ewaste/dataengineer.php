@@ -1,3 +1,36 @@
+<?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+session_start();
+
+if (!isset($_SESSION['username'])) {
+    header("Location: dataengineer_login.php");
+    exit();
+}
+
+$servername = "sql205.infinityfree.com";
+$db_username = "if0_39596749";
+$db_password = "kU8lWXzrSSbyN";
+$dbname = "if0_39596749_e_waste";
+
+$conn = new mysqli($servername, $db_username, $db_password, $dbname);
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+$submitted = false;
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['allProducts'])) {
+    $allData = json_decode($_POST['allProducts'], true);
+    $stmt = $conn->prepare("INSERT INTO ewaste_products (user_id, category, product, condition_category, weight, co2, cashback, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, NOW())");
+
+    foreach ($allData as $row) {
+        $stmt->bind_param("ssssddd", $row['userId'], $row['category'], $row['product'], $row['condition'], $row['weight'], $row['co2'], $row['cashback']);
+        $stmt->execute();
+    }
+
+    $submitted = true;
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,7 +55,7 @@
         👋 Welcome Engineer
       </h2>
       <div class="flex gap-2">
-        <a href="logout.html" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded transition">Logout</a>
+        <a href="logout.php" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded transition">Logout</a>
         <?php if ($submitted): ?>
           <button onclick="printCertificate()" class="bg-green-700 hover:bg-green-800 text-white px-4 py-2 rounded transition">Print Certificate</button>
         <?php endif; ?>
