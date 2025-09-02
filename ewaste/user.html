@@ -198,17 +198,6 @@
     return alert("Please select a category, product, and enter weight");
   }
 
-  // ✅ Check if the same product already exists in the table
-  const rows = document.querySelectorAll("#productTable tr");
-  for (let r of rows) {
-    const existingCategory = r.getAttribute("data-category");
-    const existingProduct = r.getAttribute("data-product");
-    if (existingCategory === category && existingProduct === product) {
-      alert("This product is already added!");
-      return; // stop adding duplicate
-    }
-  }
-
   const co2 = weight * 1.2;
   const cash = weight * 5;
 
@@ -218,8 +207,6 @@
   totalCash += cash;
 
   const tr = document.createElement("tr");
-  tr.setAttribute("data-category", category);
-  tr.setAttribute("data-product", product);
   tr.innerHTML = `
     <td>${row}</td>
     <td>${product} <br><small style="color:gray">(${category})</small></td>
@@ -233,10 +220,12 @@
   document.getElementById("totalCO2").textContent = totalCO2.toFixed(1);
   document.getElementById("totalCash").textContent = totalCash.toFixed(0);
 
+  // ✅ Reset inputs after adding
+  document.getElementById("categorySelect").value = "";
+  document.getElementById("productSelect").innerHTML = ""; // clears product list
   document.getElementById("weightInput").value = "";
 }
-cument.getElementById("weightInput").value = "";
-    }
+
   </script>
 </body>
 </html>
