@@ -2,99 +2,254 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>E-Waste Chatbot</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="font-sans">
+  <title>Gemini Chatbot</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
-<div id="chatbot-html-container">
-  <div id="chat-widget-container" class="fixed bottom-0 right-0 w-full max-w-md mx-auto bg-white rounded-xl shadow-2xl overflow-hidden flex flex-col h-[70vh] z-40">
-    <div class="flex flex-col flex-grow overflow-hidden">
-      <div class="bg-blue-600 text-white p-4 flex items-center justify-between">
-        <h1 class="text-xl font-bold">E-Waste Assistant</h1>
-      </div>
-      <div id="chat-messages" class="flex-grow p-4 overflow-y-auto space-y-4 bg-gray-100">
-        <div class="flex items-start">
-          <div class="flex-shrink-0 w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold text-sm">AI</div>
-          <div class="ml-3 bg-white p-3 rounded-xl max-w-[80%] shadow-sm">
-            <p class="text-sm text-gray-800">Hello! How can I help you with e-waste management today?</p>
-          </div>
-        </div>
-      </div>
-      <div class="p-4 bg-gray-50 border-t border-gray-200">
-        <div class="flex items-center justify-center mb-2">
-          <button id="summary-button" class="bg-gray-200 px-4 py-2 rounded-full">✨ Summarize</button>
-        </div>
-        <div class="flex items-center space-x-2">
-          <input id="user-input" type="text" placeholder="Type your message..." class="flex-grow p-3 rounded-full border border-gray-300 focus:outline-none">
-          <button id="send-button" class="bg-blue-600 text-white p-3 rounded-full">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor"><path d="M3.5 2.4a.75.75 0 0 0-.9.94l2.4 7.9H13.5a.75.75 0 0 1 0 1.5H5l-2.4 7.9a.75.75 0 0 0 .9.94 60.5 60.5 0 0 0 18.4-9a.75.75 0 0 0 0-1.2 60.5 60.5 0 0 0-18.4-9Z" /></svg>
-          </button>
-        </div>
-      </div>
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: #ffffff;
+      color: #000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .chat-container {
+      width: 100%;
+      max-width: 900px;
+      height: 95vh;
+      background: #ffffff;
+      display: flex;
+      flex-direction: column;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid #ddd;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    /* Header */
+    .header {
+      padding: 12px;
+      background: #f7f7f8;
+      display: flex;
+      justify-content: flex-end;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    .header button {
+      color: white;
+      background: #19c37d;
+      padding: 6px 14px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .header button:hover {
+      background: #15a56d;
+    }
+
+    /* Chat area */
+    .chat-box {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .message {
+      display: flex;
+      margin: 12px 0;
+      width: 100%;
+    }
+
+    .user {
+      justify-content: flex-end;
+    }
+
+    .ai {
+      justify-content: flex-start;
+    }
+
+    .bubble {
+      padding: 14px 18px;
+      border-radius: 10px;
+      max-width: 80%;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      animation: fadeIn 0.25s ease-in;
+      font-size: 15px;
+    }
+
+    .user .bubble {
+      background: #0078ff;
+      color: white;
+      border-bottom-right-radius: 0;
+    }
+
+    .ai .bubble {
+      background: #f1f1f0;
+      color: #000;
+      border-bottom-left-radius: 0;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Input bar like ChatGPT */
+    .input-area {
+      display: flex;
+      padding: 16px;
+      background: #f7f7f8;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    textarea {
+      flex: 1;
+      background: #ffffff;
+      border: 1px solid #ccc;
+      outline: none;
+      color: #000;
+      font-size: 15px;
+      resize: none;
+      height: 50px;
+      padding: 12px;
+      border-radius: 6px;
+    }
+
+    button.send {
+      background: #19c37d;
+      border: none;
+      padding: 0 20px;
+      margin-left: 10px;
+      border-radius: 6px;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    button.send:hover {
+      background: #15a56d;
+    }
+
+    /* Scrollbar */
+    .chat-box::-webkit-scrollbar {
+      width: 8px;
+    }
+    .chat-box::-webkit-scrollbar-thumb {
+      background: #bbb;
+      border-radius: 4px;
+    }
+
+    /* Typing animation */
+    .typing {
+      display: flex;
+      gap: 5px;
+      font-size: 18px;
+      animation: fadeIn 0.25s ease-in;
+    }
+
+    .dot {
+      animation: blink 1.5s infinite;
+    }
+    .dot:nth-child(2) { animation-delay: 0.3s; }
+    .dot:nth-child(3) { animation-delay: 0.6s; }
+
+    @keyframes blink {
+      0%, 80%, 100% { opacity: 0; }
+      40% { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="chat-container">
+    <div class="header">
+      <button onclick="newChat()">🆕 New Chat</button>
+    </div>
+    <div class="chat-box" id="chatBox"></div>
+    <div class="input-area">
+      <textarea id="prompt" placeholder="Message Gemini..." required></textarea>
+      <button class="send" onclick="sendMessage()">➤</button>
     </div>
   </div>
-</div>
 
-<script>
-  const chatAPI_KEY = "AIzaSyDbZ49WeCSeITTlvMAGHLL5a52K8R6vDWw";
-  const chatAPI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" + chatAPI_KEY;
+  <script>
+    const API_KEY = "AIzaSyDbZ49WeCSeITTlvMAGHLL5a52K8R6vDWw";  // 🔑 put your Gemini API key here
+    const MODEL = "gemini-2.5-flash";
+    const chatBox = document.getElementById("chatBox");
+    const promptInput = document.getElementById("prompt");
 
-  const chatMessages = document.getElementById('chat-messages');
-  const userInput = document.getElementById('user-input');
-  const sendButton = document.getElementById('send-button');
-  const summaryButton = document.getElementById('summary-button');
+    function addMessage(role, text, isTyping=false) {
+      const messageDiv = document.createElement("div");
+      messageDiv.className = "message " + role;
+      const bubble = document.createElement("div");
+      bubble.className = "bubble";
 
-  function appendMessage(sender, text) {
-    const messageContainer = document.createElement('div');
-    messageContainer.classList.add('flex', 'items-start');
-    const avatar = document.createElement('div');
-    avatar.classList.add('flex-shrink-0','w-8','h-8','rounded-full','flex','items-center','justify-center','font-bold','text-sm');
-    const messageBubble = document.createElement('div');
-    messageBubble.classList.add('p-3','rounded-xl','max-w-[80%]','shadow-sm');
-    if (sender === 'user') {
-      messageContainer.classList.add('justify-end');
-      avatar.classList.add('order-2','ml-3','bg-gray-400','text-white');
-      avatar.innerText = 'You';
-      messageBubble.classList.add('order-1','bg-blue-500','text-white');
-    } else {
-      avatar.classList.add('bg-blue-500','text-white');
-      avatar.innerText = 'AI';
-      messageBubble.classList.add('ml-3','bg-white','text-gray-800');
+      if (isTyping) {
+        bubble.innerHTML = `<span class="typing">
+          <span class="dot">Typing💭</span>
+        </span>`;
+      } else {
+        bubble.textContent = text;
+      }
+
+      messageDiv.appendChild(bubble);
+      chatBox.appendChild(messageDiv);
+      chatBox.scrollTop = chatBox.scrollHeight;
+      return messageDiv; // return reference for later update
     }
-    messageBubble.innerHTML = `<p class="text-sm">${text.replace(/\n/g,'<br>')}</p>`;
-    messageContainer.appendChild(messageBubble);
-    messageContainer.appendChild(avatar);
-    chatMessages.appendChild(messageContainer);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-  }
 
-  async function sendMessage(isSummaryRequest = false) {
-    const userMessage = userInput.value.trim();
-    if (userMessage === '' && !isSummaryRequest) return;
-    if (!isSummaryRequest) {
-      appendMessage('user', userMessage);
-      userInput.value = '';
+    async function sendMessage() {
+      const prompt = promptInput.value.trim();
+      if (!prompt) return;
+      addMessage("user", prompt);
+      promptInput.value = "";
+
+      // AI typing placeholder
+      const thinkingMsg = addMessage("ai", "", true);
+
+      try {
+        const response = await fetch(
+          `https://generativelanguage.googleapis.com/v1/models/${MODEL}:generateContent?key=${API_KEY}`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              contents: [{ parts: [{ text: prompt }] }]
+            })
+          }
+        );
+
+        const data = await response.json();
+        const aiText =
+          data?.candidates?.[0]?.content?.parts?.[0]?.text ||
+          "❌ Error: " + (data?.error?.message || "Unknown");
+
+        // Replace typing animation with AI response
+        thinkingMsg.querySelector(".bubble").textContent = aiText;
+        chatBox.scrollTop = chatBox.scrollHeight;
+      } catch (err) {
+        thinkingMsg.querySelector(".bubble").textContent = "❌ Request failed!";
+      }
     }
-    const payload = { contents: [{ role:'user', parts:[{ text:userMessage }] }] };
-    try {
-      const response = await fetch(chatAPI_URL, {
-        method:'POST',
-        headers:{ 'Content-Type':'application/json' },
-        body:JSON.stringify(payload)
-      });
-      const result = await response.json();
-      const aiResponse = result.candidates?.[0]?.content?.parts?.[0]?.text || "Error: No response.";
-      appendMessage('ai', aiResponse);
-    } catch (error) {
-      appendMessage('ai', "Error connecting to Gemini API.");
+
+    function newChat() {
+      chatBox.innerHTML = "";
     }
-  }
 
-  sendButton.addEventListener('click', () => sendMessage(false));
-  summaryButton.addEventListener('click', () => sendMessage(true));
-  userInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(false); });
-</script>
-
+    // Press Enter to send
+    promptInput.addEventListener("keydown", function(e) {
+      if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+    });
+  </script>
 </body>
 </html>
