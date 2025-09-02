@@ -98,7 +98,7 @@
   👋 Welcome, User!
 </h1>
 <div style="text-align: right; margin-top: -40px; margin-bottom: 20px;">
-  <a href="index.php">
+  <a href="index.html">
     <button style="background-color: #4a5568;">🏠 Home</button>
   </a>
 </div>
@@ -190,31 +190,52 @@
     let row = 0, totalWeight = 0, totalCO2 = 0, totalCash = 0;
 
     function addProduct() {
-      const product = document.getElementById("productSelect").value;
-      const weight = parseFloat(document.getElementById("weightInput").value);
-      if (!product || isNaN(weight)) return alert("Please select a product and enter weight");
-      const co2 = weight * 1.2;
-      const cash = weight * 5;
+  const category = document.getElementById("categorySelect").value;
+  const product = document.getElementById("productSelect").value;
+  const weight = parseFloat(document.getElementById("weightInput").value);
 
-      row++;
-      totalWeight += weight;
-      totalCO2 += co2;
-      totalCash += cash;
+  if (!category || !product || isNaN(weight)) {
+    return alert("Please select a category, product, and enter weight");
+  }
 
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td>${row}</td>
-        <td>${product}</td>
-        <td>${weight.toFixed(1)}</td>
-        <td>${co2.toFixed(1)}</td>
-        <td>${cash.toFixed(0)}</td>`;
-      document.getElementById("productTable").appendChild(tr);
+  // ✅ Check if the same product already exists in the table
+  const rows = document.querySelectorAll("#productTable tr");
+  for (let r of rows) {
+    const existingCategory = r.getAttribute("data-category");
+    const existingProduct = r.getAttribute("data-product");
+    if (existingCategory === category && existingProduct === product) {
+      alert("This product is already added!");
+      return; // stop adding duplicate
+    }
+  }
 
-      document.getElementById("totalWeight").textContent = totalWeight.toFixed(1);
-      document.getElementById("totalCO2").textContent = totalCO2.toFixed(1);
-      document.getElementById("totalCash").textContent = totalCash.toFixed(0);
+  const co2 = weight * 1.2;
+  const cash = weight * 5;
 
-      document.getElementById("weightInput").value = "";
+  row++;
+  totalWeight += weight;
+  totalCO2 += co2;
+  totalCash += cash;
+
+  const tr = document.createElement("tr");
+  tr.setAttribute("data-category", category);
+  tr.setAttribute("data-product", product);
+  tr.innerHTML = `
+    <td>${row}</td>
+    <td>${product} <br><small style="color:gray">(${category})</small></td>
+    <td>${weight.toFixed(1)}</td>
+    <td>${co2.toFixed(1)}</td>
+    <td>${cash.toFixed(0)}</td>`;
+  
+  document.getElementById("productTable").appendChild(tr);
+
+  document.getElementById("totalWeight").textContent = totalWeight.toFixed(1);
+  document.getElementById("totalCO2").textContent = totalCO2.toFixed(1);
+  document.getElementById("totalCash").textContent = totalCash.toFixed(0);
+
+  document.getElementById("weightInput").value = "";
+}
+cument.getElementById("weightInput").value = "";
     }
   </script>
 </body>
