@@ -1,173 +1,134 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>E-Waste Dashboard</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
-   <!-- ✅ Tailwind CSS -->
+  
+  <!-- ✅ Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- ✅ Font Awesome for icons -->
+  <!-- ✅ Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-  <!-- Your custom styles -->
   <style>
     body {
       font-family: 'Poppins', sans-serif;
-      margin: 0;
-      padding: 20px;
-      background: #f0f4f8;
-      color: #2d3748;
+      background: linear-gradient(135deg, #f0f4f8, #e2e8f0);
+      transition: background 0.5s ease, color 0.5s ease;
     }
+
+    /* Dark mode */
+    .dark {
+      background: linear-gradient(135deg, #1a202c, #2d3748);
+      color: #e2e8f0;
+    }
+
     h2 {
-      background: #2b6cb0;
-      color: #fff;
-      padding: 12px 20px;
-      border-radius: 8px;
-      margin-bottom: 20px;
-    }
-    .section {
-      background: #fff;
-      padding: 25px;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-      margin-bottom: 30px;
+      @apply text-lg font-semibold mb-4;
     }
 
-    /* Modern FAQ accordion */
-    .accordion {
-      border: 1px solid #cbd5e0;
-      border-radius: 8px;
-      overflow: hidden;
+    /* Table enhancements */
+    table tbody tr:nth-child(odd) {
+      background-color: #f9fafb;
     }
-    .accordion-item {
-      border-bottom: 1px solid #e2e8f0;
+    .dark table tbody tr:nth-child(odd) {
+      background-color: #2d3748;
     }
-    .accordion-header {
-      background: #edf2f7;
-      padding: 15px 20px;
-      cursor: pointer;
-      font-weight: 600;
-      transition: background 0.3s;
-    }
-    .accordion-header:hover {
-      background: #e2e8f0;
-    }
-    .accordion-content {
-      display: none;
-      padding: 15px 20px;
-      background: #fff;
-    }
-
-    select, input {
-      padding: 12px;
-      width: 100%;
-      margin-top: 12px;
-      margin-bottom: 20px;
-      border-radius: 6px;
-      border: 1px solid #cbd5e0;
-      font-size: 15px;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-    }
-    table, th, td {
-      border: 1px solid #e2e8f0;
-    }
-    th {
+    table tbody tr:hover {
       background-color: #edf2f7;
+      transition: 0.3s;
     }
-    th, td {
-      padding: 14px;
-      text-align: center;
-      font-size: 14px;
+    .dark table tbody tr:hover {
+      background-color: #4a5568;
     }
-    button {
-      background: #2b6cb0;
-      color: white;
-      border: none;
-      padding: 12px 24px;
-      cursor: pointer;
-      border-radius: 6px;
-      font-weight: 500;
-      transition: background 0.3s;
+
+    /* Floating button glow */
+    #chatbot-toggle {
+      animation: pulse 2s infinite;
     }
-    button:hover {
-      background: #2c5282;
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.6); }
+      70% { box-shadow: 0 0 0 15px rgba(16, 185, 129, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
     }
   </style>
 </head>
-<body>
-<h1 style="text-align: center; color: #2b6cb0; font-weight: 600;">
-  👋 Welcome, User!
-</h1>
-<div style="text-align: right; margin-top: -40px; margin-bottom: 20px;">
-  <a href="index.html">
-    <button style="background-color: #4a5568;">🏠 Home</button>
-  </a>
-</div>
-  <h2>⚙️ E-Waste Calculator</h2>
-  <div class="section">
-    <label>📂 Product Category</label>
-    <select id="categorySelect" onchange="updateProducts()">
-      <option value="">Select category</option>
-      <option value="Large Appliances">Large Appliances</option>
-      <option value="Small Appliances">Small Appliances</option>
-      <option value="IT & Telecom">IT & Telecom</option>
-      <option value="Consumer Electronics">Consumer Electronics</option>
-      <option value="Lighting Equipment">Lighting Equipment</option>
-      <option value="Electrical Tools">Electrical Tools</option>
-      <option value="Toys">Toys</option>
-      <option value="Medical Devices">Medical Devices</option>
-      <option value="Monitoring Devices">Monitoring Devices</option>
-      <option value="Batteries & Cables">Batteries & Cables</option>
-    </select>
-
-    <label>📦 Product Name</label>
-    <select id="productSelect"></select>
-
-    <label>⚖️ Weight of Product (kg)</label>
-    <input type="number" id="weightInput" placeholder="Enter weight in kg" />
-    <button onclick="addProduct()">➕ Add</button>
+<body class="p-6">
+  <!-- Header -->
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold text-blue-700 dark:text-green-400">👋 Welcome, User!</h1>
+    <div class="flex gap-2">
+      <button onclick="toggleTheme()" class="px-4 py-2 rounded-lg bg-gray-700 text-white hover:bg-gray-800 transition">
+        🌗 Toggle Mode
+      </button>
+      <a href="index.html">
+        <button class="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition">🏠 Home</button>
+      </a>
+    </div>
   </div>
 
-  <h2>📊 Calculation Table</h2>
-  <div class="section">
-    <table>
+  <!-- Calculator -->
+  <h2 class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md">⚙️ E-Waste Calculator</h2>
+  <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg mb-6 transition">
+    <label class="block font-medium">📂 Product Category</label>
+    <select id="categorySelect" onchange="updateProducts()" 
+      class="w-full mt-2 mb-4 p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 focus:ring-2 focus:ring-blue-400 transition"></select>
+
+    <label class="block font-medium">📦 Product Name</label>
+    <select id="productSelect" 
+      class="w-full mt-2 mb-4 p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 focus:ring-2 focus:ring-blue-400 transition"></select>
+
+    <label class="block font-medium">⚖️ Weight of Product (kg)</label>
+    <input type="number" id="weightInput" placeholder="Enter weight in kg" 
+      class="w-full mt-2 mb-4 p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 focus:ring-2 focus:ring-green-400 transition">
+
+    <button onclick="addProduct()" 
+      class="px-6 py-3 rounded-lg bg-green-600 text-white hover:bg-green-700 shadow-md transition">➕ Add</button>
+  </div>
+
+  <!-- Table -->
+  <h2 class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md">📊 Calculation Table</h2>
+  <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg transition">
+    <table class="w-full border-collapse">
       <thead>
-        <tr>
-          <th>S.No</th>
-          <th>Product Name</th>
-          <th>Weight (kg)</th>
-          <th>CO₂ Saved (kg)</th>
-          <th>Cash Back (₹)</th>
+        <tr class="bg-gray-100 dark:bg-gray-700">
+          <th class="py-3 px-4">S.No</th>
+          <th class="py-3 px-4">Product Name</th>
+          <th class="py-3 px-4">Weight (kg)</th>
+          <th class="py-3 px-4">CO₂ Saved (kg)</th>
+          <th class="py-3 px-4">Cash Back (₹)</th>
         </tr>
       </thead>
       <tbody id="productTable"></tbody>
       <tfoot>
-        <tr style="font-weight: 600;">
-          <td colspan="2">Total</td>
-          <td id="totalWeight">0</td>
-          <td id="totalCO2">0</td>
-          <td id="totalCash">0</td>
+        <tr class="font-bold bg-gray-200 dark:bg-gray-600">
+          <td colspan="2" class="py-3 px-4">Total</td>
+          <td id="totalWeight" class="py-3 px-4">0</td>
+          <td id="totalCO2" class="py-3 px-4">0</td>
+          <td id="totalCash" class="py-3 px-4">0</td>
         </tr>
       </tfoot>
     </table>
   </div>
 
+  <!-- Chatbot -->
+  <button id="chatbot-toggle" 
+    class="fixed bottom-5 right-5 bg-green-600 text-white p-4 rounded-full shadow-lg z-50 hover:bg-green-700 transition">
+    <i class="fas fa-comments text-xl"></i>
+  </button>
+
+  <iframe id="chatbot-frame" 
+    src="chatgpt.html" 
+    class="fixed bottom-20 right-5 w-[400px] h-[600px] border-0 shadow-lg rounded-lg z-50 hidden"></iframe>
+
   <script>
-    // Accordion logic
-    function toggleAccordion(header) {
-      const content = header.nextElementSibling;
-      const isOpen = content.style.display === 'block';
-      document.querySelectorAll('.accordion-content').forEach(c => c.style.display = 'none');
-      content.style.display = isOpen ? 'none' : 'block';
+    // Dark mode toggle
+    function toggleTheme() {
+      document.body.classList.toggle("dark");
     }
 
-    // Product category options
+    // Product options
     const productOptions = {
       "Large Appliances": ["Refrigerator", "Washing Machine", "Air Conditioner"],
       "Small Appliances": ["Mixer", "Toaster", "Electric Kettle"],
@@ -197,61 +158,45 @@
     let row = 0, totalWeight = 0, totalCO2 = 0, totalCash = 0;
 
     function addProduct() {
-  const category = document.getElementById("categorySelect").value;
-  const product = document.getElementById("productSelect").value;
-  const weight = parseFloat(document.getElementById("weightInput").value);
+      const category = document.getElementById("categorySelect").value;
+      const product = document.getElementById("productSelect").value;
+      const weight = parseFloat(document.getElementById("weightInput").value);
 
-  if (!category || !product || isNaN(weight)) {
-    return alert("Please select a category, product, and enter weight");
-  }
+      if (!category || !product || isNaN(weight)) {
+        return alert("Please select a category, product, and enter weight");
+      }
 
-  const co2 = weight * 1.2;
-  const cash = weight * 5;
+      const co2 = weight * 1.2;
+      const cash = weight * 5;
 
-  row++;
-  totalWeight += weight;
-  totalCO2 += co2;
-  totalCash += cash;
+      row++;
+      totalWeight += weight;
+      totalCO2 += co2;
+      totalCash += cash;
 
-  const tr = document.createElement("tr");
-  tr.innerHTML = `
-    <td>${row}</td>
-    <td>${product} <br><small style="color:gray">(${category})</small></td>
-    <td>${weight.toFixed(1)}</td>
-    <td>${co2.toFixed(1)}</td>
-    <td>${cash.toFixed(0)}</td>`;
-  
-  document.getElementById("productTable").appendChild(tr);
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td class="py-2 px-4">${row}</td>
+        <td class="py-2 px-4">${product} <br><small class="text-gray-500 dark:text-gray-400">(${category})</small></td>
+        <td class="py-2 px-4">${weight.toFixed(1)}</td>
+        <td class="py-2 px-4">${co2.toFixed(1)}</td>
+        <td class="py-2 px-4">${cash.toFixed(0)}</td>`;
+      document.getElementById("productTable").appendChild(tr);
 
-  document.getElementById("totalWeight").textContent = totalWeight.toFixed(1);
-  document.getElementById("totalCO2").textContent = totalCO2.toFixed(1);
-  document.getElementById("totalCash").textContent = totalCash.toFixed(0);
+      document.getElementById("totalWeight").textContent = totalWeight.toFixed(1);
+      document.getElementById("totalCO2").textContent = totalCO2.toFixed(1);
+      document.getElementById("totalCash").textContent = totalCash.toFixed(0);
 
-  // ✅ Reset inputs after adding
-  document.getElementById("categorySelect").value = "";
-  document.getElementById("productSelect").innerHTML = ""; // clears product list
-  document.getElementById("weightInput").value = "";
-}
+      // reset
+      document.getElementById("categorySelect").value = "";
+      document.getElementById("productSelect").innerHTML = "";
+      document.getElementById("weightInput").value = "";
+    }
 
+    // Chatbot toggle
+    const toggleBtn = document.getElementById("chatbot-toggle");
+    const chatbotFrame = document.getElementById("chatbot-frame");
+    toggleBtn.addEventListener("click", () => chatbotFrame.classList.toggle("hidden"));
   </script>
-  <!-- ✅ Chatbot Toggle Button -->
-<button id="chatbot-toggle" 
-  class="fixed bottom-5 right-5 bg-green-600 text-white p-4 rounded-full shadow-lg z-50 hover:bg-green-700 transition">
-  <i class="fas fa-comments text-xl"></i>
-</button>
-
-<!-- ✅ Chatbot iframe (hidden by default) -->
-<iframe id="chatbot-frame" 
-  src="chatgpt.html" 
-  class="fixed bottom-20 right-5 w-[400px] h-[600px] border-0 shadow-lg rounded-lg z-50 hidden"></iframe>
-
-<script>
-  const toggleBtn = document.getElementById("chatbot-toggle");
-  const chatbotFrame = document.getElementById("chatbot-frame");
-
-  toggleBtn.addEventListener("click", () => {
-    chatbotFrame.classList.toggle("hidden");
-  });
-</script>
 </body>
 </html>
