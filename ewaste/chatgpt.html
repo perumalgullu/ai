@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Gemini Chatbot</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- ✅ important for mobile -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- ✅ Mobile scaling -->
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -28,6 +28,7 @@
       overflow: hidden;
       border: 1px solid #ddd;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      position: relative;
     }
 
     /* Header */
@@ -54,7 +55,7 @@
     /* Chat area */
     .chat-box {
       flex: 1;
-      padding: 16px;
+      padding: 20px;
       overflow-y: auto;
       display: flex;
       flex-direction: column;
@@ -62,7 +63,7 @@
 
     .message {
       display: flex;
-      margin: 8px 0;
+      margin: 12px 0;
       width: 100%;
     }
 
@@ -70,7 +71,7 @@
     .ai { justify-content: flex-start; }
 
     .bubble {
-      padding: 12px 16px;
+      padding: 14px 18px;
       border-radius: 10px;
       max-width: 80%;
       line-height: 1.5;
@@ -96,7 +97,7 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Input bar */
+    /* Input bar like ChatGPT */
     .input-area {
       display: flex;
       padding: 12px;
@@ -112,68 +113,72 @@
       color: #000;
       font-size: 15px;
       resize: none;
-      height: 45px;
-      padding: 10px;
+      height: 50px;
+      padding: 12px;
       border-radius: 6px;
     }
 
     button.send {
       background: #19c37d;
       border: none;
-      padding: 0 18px;
-      margin-left: 8px;
+      padding: 0 20px;
+      margin-left: 10px;
       border-radius: 6px;
       color: white;
       font-size: 16px;
       cursor: pointer;
       transition: background 0.2s;
     }
-
     button.send:hover { background: #15a56d; }
 
-    /* Scrollbar */
-    .chat-box::-webkit-scrollbar { width: 6px; }
-    .chat-box::-webkit-scrollbar-thumb {
-      background: #bbb;
-      border-radius: 3px;
+    /* Floating Mic Button */
+    .mic-btn {
+      position: absolute;
+      bottom: 80px;
+      right: 20px;
+      width: 55px;
+      height: 55px;
+      background: #0078ff;
+      color: #fff;
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 24px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      transition: background 0.2s, transform 0.2s;
+      z-index: 10;
+    }
+    .mic-btn.active {
+      background: #e63946;
+      transform: scale(1.1);
     }
 
+    /* Scrollbar */
+    .chat-box::-webkit-scrollbar { width: 8px; }
+    .chat-box::-webkit-scrollbar-thumb { background: #bbb; border-radius: 4px; }
+
     /* Typing animation */
-    .typing { display: flex; gap: 5px; font-size: 14px; }
+    .typing { display: flex; gap: 5px; font-size: 18px; animation: fadeIn 0.25s ease-in; }
     .dot { animation: blink 1.5s infinite; }
     .dot:nth-child(2) { animation-delay: 0.3s; }
     .dot:nth-child(3) { animation-delay: 0.6s; }
+    @keyframes blink { 0%, 80%, 100% { opacity: 0; } 40% { opacity: 1; } }
 
-    @keyframes blink {
-      0%, 80%, 100% { opacity: 0; }
-      40% { opacity: 1; }
+    /* ✅ Mobile Responsive */
+    @media (max-width: 768px) {
+      .chat-container { height: 100vh; border-radius: 0; }
+      .chat-box { padding: 12px; }
+      textarea { height: 45px; font-size: 14px; }
+      button.send { padding: 0 14px; font-size: 14px; }
+      .mic-btn { width: 50px; height: 50px; font-size: 22px; }
     }
-
-    /* ✅ Mobile responsiveness */
-    @media (max-width: 600px) {
-      .chat-container {
-        width: 100%;
-        height: 100vh;
-        border-radius: 0;
-        box-shadow: none;
-      }
-      .bubble {
-        max-width: 90%;
-        font-size: 14px;
-        padding: 10px 14px;
-      }
-      textarea {
-        font-size: 14px;
-        height: 40px;
-      }
-      button.send {
-        padding: 0 14px;
-        font-size: 14px;
-      }
-      .header button {
-        font-size: 13px;
-        padding: 5px 12px;
-      }
+    @media (max-width: 480px) {
+      .bubble { max-width: 90%; font-size: 14px; padding: 10px 14px; }
+      .header button { font-size: 12px; padding: 5px 10px; }
+      .mic-btn { bottom: 70px; right: 15px; width: 45px; height: 45px; font-size: 20px; }
     }
   </style>
 </head>
@@ -187,13 +192,15 @@
       <textarea id="prompt" placeholder="Message AI" required></textarea>
       <button class="send" onclick="sendMessage()">➤</button>
     </div>
+    <button class="mic-btn" id="micBtn">🎤</button> <!-- ✅ Mic Button -->
   </div>
 
   <script>
-    const API_KEY = "YOUR_GEMINI_API_KEY"; // 🔑 Replace with your key
+    const API_KEY = "AIzaSyDbZ49WeCSeITTlvMAGHLL5a52K8R6vDWw";  // 🔑 Replace with your API key
     const MODEL = "gemini-2.5-flash";
     const chatBox = document.getElementById("chatBox");
     const promptInput = document.getElementById("prompt");
+    const micBtn = document.getElementById("micBtn");
 
     function addMessage(role, text, isTyping=false) {
       const messageDiv = document.createElement("div");
@@ -229,12 +236,9 @@
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              contents: [{ parts: [{ text: prompt }] }]
-            })
+            body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
           }
         );
-
         const data = await response.json();
         const aiText =
           data?.candidates?.[0]?.content?.parts?.[0]?.text ||
@@ -258,6 +262,27 @@
         sendMessage();
       }
     });
+
+    // ✅ Voice Input (Web Speech API)
+    let recognition;
+    if ('webkitSpeechRecognition' in window) {
+      recognition = new webkitSpeechRecognition();
+      recognition.continuous = false;
+      recognition.interimResults = false;
+      recognition.lang = "en-US";
+
+      recognition.onstart = () => micBtn.classList.add("active");
+      recognition.onend = () => micBtn.classList.remove("active");
+      recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        promptInput.value = transcript;
+        sendMessage();
+      };
+
+      micBtn.onclick = () => recognition.start();
+    } else {
+      micBtn.style.display = "none"; // hide mic if not supported
+    }
 
     window.onload = () => {
       addMessage("ai", "👋 Hello! I’m your Gemini chatbot. How can I help you today?");
