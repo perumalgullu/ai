@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Data Engineer Login</title>
+  <title>Product Engineer Login</title>
   <style>
     body {
       font-family: 'Poppins', sans-serif;
@@ -54,7 +54,7 @@
 </head>
 <body>
   <div class="login-box">
-    <h2>🔐 Data Engineer Login</h2>
+    <h2>🔐 Product Engineer Login</h2>
     <form onsubmit="return validateLogin(event)">
       <input type="text" id="username" placeholder="👤 Username" required>
       <input type="password" id="password" placeholder="🔒 Password" required>
@@ -70,7 +70,7 @@
       let pass = document.getElementById("password").value;
 
       // Dummy validation (change with real backend later)
-      if (user === "dataengineer" && pass === "admin123") {
+      if (user === "admin" && pass === "admin123") {
         alert("✅ Login Successful!");
         window.location.href = "dataengineer.html"; // redirect
       } else {
