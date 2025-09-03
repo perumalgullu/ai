@@ -1,106 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>E-Waste Dashboard</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
-   <!-- ✅ Tailwind CSS -->
+  
+  <!-- ✅ Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- ✅ Font Awesome for icons -->
+  <!-- ✅ Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-  <!-- Custom styles -->
   <style>
     body {
       font-family: 'Poppins', sans-serif;
-      margin: 0;
-      padding: 20px;
       background: linear-gradient(135deg, #f0f4f8, #e2e8f0);
-      color: #2d3748;
       transition: background 0.5s ease, color 0.5s ease;
     }
-    h2 {
-      background: linear-gradient(90deg, #2b6cb0, #3182ce);
-      color: #fff;
-      padding: 12px 20px;
-      border-radius: 8px;
-      margin-bottom: 20px;
-      box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+    /* Dark mode */
+    .dark {
+      background: linear-gradient(135deg, #1a202c, #2d3748);
+      color: #e2e8f0;
     }
-    .section {
-      background: #fff;
-      padding: 25px;
-      border-radius: 14px;
-      box-shadow: 0 6px 14px rgba(0,0,0,0.1);
-      margin-bottom: 30px;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    .section:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 10px 20px rgba(0,0,0,0.15);
-    }
-
-    /* Inputs & selects */
-    select, input {
-      padding: 12px;
-      width: 100%;
-      margin-top: 12px;
-      margin-bottom: 20px;
-      border-radius: 8px;
-      border: 1px solid #cbd5e0;
-      font-size: 15px;
-      transition: border 0.3s, box-shadow 0.3s;
-    }
-    select:focus, input:focus {
-      outline: none;
-      border-color: #3182ce;
-      box-shadow: 0 0 6px rgba(49,130,206,0.4);
-    }
-
-    /* Table styling */
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-      border-radius: 10px;
-      overflow: hidden;
-    }
-    th {
-      background: #2b6cb0;
-      color: #fff;
-    }
-    th, td {
-      padding: 14px;
-      text-align: center;
-      font-size: 14px;
-    }
-    tbody tr:nth-child(even) {
-      background: #f7fafc;
-    }
-    tbody tr:hover {
-      background: #edf2f7;
-      transition: 0.3s;
-    }
-
-    /* Buttons */
-    button {
-      background: linear-gradient(90deg, #2b6cb0, #3182ce);
-      color: white;
-      border: none;
-      padding: 12px 24px;
-      cursor: pointer;
-      border-radius: 8px;
-      font-weight: 500;
-      transition: transform 0.2s, background 0.3s;
-    }
-    button:hover {
-      background: linear-gradient(90deg, #2c5282, #2b6cb0);
-      transform: scale(1.05);
-    }
-
-    /* Floating chatbot button with pulse */
+    /* Floating button glow */
     #chatbot-toggle {
       animation: pulse 2s infinite;
     }
@@ -111,20 +33,23 @@
     }
   </style>
 </head>
-<body>
-<h1 style="text-align: center; color: #2b6cb0; font-weight: 600; font-size: 28px; margin-bottom: 20px;">
-  👋 Welcome, User!
-</h1>
-<div style="text-align: right; margin-top: -40px; margin-bottom: 20px;">
-  <a href="index.html">
-    <button style="background-color: #4a5568;">🏠 Home</button>
-  </a>
-</div>
+<body class="p-6">
+  <!-- Header -->
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold text-blue-700 dark:text-green-400">👋 Welcome, User!</h1>
+    <div class="flex gap-2">
+      <a href="index.html">
+        <button class="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition">🏠 Home</button>
+      </a>
+    </div>
+  </div>
 
-  <h2>⚙️ E-Waste Calculator</h2>
-  <div class="section">
-    <label>📂 Product Category</label>
-    <select id="categorySelect" onchange="updateProducts()">
+  <!-- Calculator -->
+  <h2 class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md">⚙️ E-Waste Calculator</h2>
+  <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg mb-6 transition">
+    <label class="block font-medium">📂 Product Category</label>
+    <select id="categorySelect" onchange="updateProducts()" 
+      class="w-full mt-2 mb-4 p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 focus:ring-2 focus:ring-blue-400 transition">
       <option value="">Select category</option>
       <option value="Large Appliances">Large Appliances</option>
       <option value="Small Appliances">Small Appliances</option>
@@ -138,48 +63,62 @@
       <option value="Batteries & Cables">Batteries & Cables</option>
     </select>
 
-    <label>📦 Product Name</label>
-    <select id="productSelect"></select>
+    <label class="block font-medium">📦 Product Name</label>
+    <select id="productSelect" 
+      class="w-full mt-2 mb-4 p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 focus:ring-2 focus:ring-blue-400 transition">
+      <option value="">Select product</option>
+    </select>
 
-    <label>⚖️ Weight of Product (kg)</label>
-    <input type="number" id="weightInput" placeholder="Enter weight in kg" />
-    <button onclick="addProduct()">➕ Add</button>
+    <label class="block font-medium">⚖️ Weight of Product (kg)</label>
+    <input type="number" id="weightInput" placeholder="Enter weight in kg" 
+      class="w-full mt-2 mb-4 p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 focus:ring-2 focus:ring-green-400 transition">
+
+    <button onclick="addProduct()" 
+      class="px-6 py-3 rounded-lg bg-green-600 text-white hover:bg-green-700 shadow-md transition">➕ Add</button>
   </div>
 
-  <h2>📊 Calculation Table</h2>
-  <div class="section">
-    <table>
+  <!-- Table -->
+  <h2 class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md mt-8">📊 Calculation Table</h2>
+  <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg transition overflow-x-auto">
+    <table class="w-full border-collapse text-center">
       <thead>
-        <tr>
-          <th>S.No</th>
-          <th>Product Name</th>
-          <th>Weight (kg)</th>
-          <th>CO₂ Saved (kg)</th>
-          <th>Cash Back (₹)</th>
+        <tr class="bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200">
+          <th class="py-3 px-4 border">S.No</th>
+          <th class="py-3 px-4 border">Product Name</th>
+          <th class="py-3 px-4 border">Weight (kg)</th>
+          <th class="py-3 px-4 border">CO₂ Saved (kg)</th>
+          <th class="py-3 px-4 border">Cash Back (₹)</th>
         </tr>
       </thead>
-      <tbody id="productTable"></tbody>
+      <tbody id="productTable" class="divide-y divide-gray-200 dark:divide-gray-600"></tbody>
       <tfoot>
-        <tr style="font-weight: 600; background:#e2e8f0;">
-          <td colspan="2">Total</td>
-          <td id="totalWeight">0</td>
-          <td id="totalCO2">0</td>
-          <td id="totalCash">0</td>
+        <tr class="font-bold bg-gray-200 dark:bg-gray-600 text-gray-900 dark:text-gray-100">
+          <td colspan="2" class="py-3 px-4 border">Total</td>
+          <td id="totalWeight" class="py-3 px-4 border">0</td>
+          <td id="totalCO2" class="py-3 px-4 border">0</td>
+          <td id="totalCash" class="py-3 px-4 border">0</td>
         </tr>
       </tfoot>
     </table>
   </div>
 
+  <!-- Chatbot -->
+  <button id="chatbot-toggle" 
+    class="fixed bottom-5 right-5 bg-green-600 text-white p-4 rounded-full shadow-lg z-50 hover:bg-green-700 transition">
+    <i class="fas fa-comments text-xl"></i>
+  </button>
+
+  <iframe id="chatbot-frame" 
+    src="chatgpt.html" 
+    class="fixed bottom-20 right-5 w-[400px] h-[600px] border-0 shadow-lg rounded-lg z-50 hidden"></iframe>
+
   <script>
-    // Accordion logic (if used)
-    function toggleAccordion(header) {
-      const content = header.nextElementSibling;
-      const isOpen = content.style.display === 'block';
-      document.querySelectorAll('.accordion-content').forEach(c => c.style.display = 'none');
-      content.style.display = isOpen ? 'none' : 'block';
+    // Dark mode toggle
+    function toggleTheme() {
+      document.body.classList.toggle("dark");
     }
 
-    // Product category options
+    // Product options
     const productOptions = {
       "Large Appliances": ["Refrigerator", "Washing Machine", "Air Conditioner"],
       "Small Appliances": ["Mixer", "Toaster", "Electric Kettle"],
@@ -196,7 +135,7 @@
     function updateProducts() {
       const category = document.getElementById("categorySelect").value;
       const productSelect = document.getElementById("productSelect");
-      productSelect.innerHTML = "";
+      productSelect.innerHTML = '<option value="">Select product</option>';
       if (productOptions[category]) {
         productOptions[category].forEach(p => {
           const opt = document.createElement("option");
@@ -226,43 +165,29 @@
       totalCash += cash;
 
       const tr = document.createElement("tr");
+      tr.className = "hover:bg-gray-100 dark:hover:bg-gray-700 transition";
       tr.innerHTML = `
-        <td>${row}</td>
-        <td>${product} <br><small style="color:gray">(${category})</small></td>
-        <td>${weight.toFixed(1)}</td>
-        <td>${co2.toFixed(1)}</td>
-        <td>${cash.toFixed(0)}</td>`;
-      
+        <td class="py-2 px-4 border">${row}</td>
+        <td class="py-2 px-4 border">${product} <br><small class="text-gray-500 dark:text-gray-400">(${category})</small></td>
+        <td class="py-2 px-4 border">${weight.toFixed(1)}</td>
+        <td class="py-2 px-4 border">${co2.toFixed(1)}</td>
+        <td class="py-2 px-4 border">${cash.toFixed(0)}</td>`;
       document.getElementById("productTable").appendChild(tr);
 
       document.getElementById("totalWeight").textContent = totalWeight.toFixed(1);
       document.getElementById("totalCO2").textContent = totalCO2.toFixed(1);
       document.getElementById("totalCash").textContent = totalCash.toFixed(0);
 
-      // Reset inputs
+      // reset
       document.getElementById("categorySelect").value = "";
-      document.getElementById("productSelect").innerHTML = "";
+      document.getElementById("productSelect").innerHTML = '<option value="">Select product</option>';
       document.getElementById("weightInput").value = "";
     }
-  </script>
 
-  <!-- ✅ Chatbot Toggle Button -->
-  <button id="chatbot-toggle" 
-    class="fixed bottom-5 right-5 bg-green-600 text-white p-4 rounded-full shadow-lg z-50 hover:bg-green-700 transition">
-    <i class="fas fa-comments text-xl"></i>
-  </button>
-
-  <!-- ✅ Chatbot iframe (hidden by default) -->
-  <iframe id="chatbot-frame" 
-    src="chatgpt.html" 
-    class="fixed bottom-20 right-5 w-[400px] h-[600px] border-0 shadow-lg rounded-lg z-50 hidden"></iframe>
-
-  <script>
+    // Chatbot toggle
     const toggleBtn = document.getElementById("chatbot-toggle");
     const chatbotFrame = document.getElementById("chatbot-frame");
-    toggleBtn.addEventListener("click", () => {
-      chatbotFrame.classList.toggle("hidden");
-    });
+    toggleBtn.addEventListener("click", () => chatbotFrame.classList.toggle("hidden"));
   </script>
 </body>
 </html>
